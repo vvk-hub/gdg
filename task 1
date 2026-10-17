@@ -1,0 +1,10 @@
+Task 1:
+Apple Pie 
+ 1) Flag submission 
+     the required flag is gdg{P1E_3xpl01ted_lol}
+2) concise technical analysis 
+    PIE(Position-Independent-Executable) randamizes the bin code placement in location everytime it runs which prevents constant or hardcoded memory offsets
+3) Reproduction steps 
+  1) Make the file as executable 
+  2) open the file in ghidra , search for a function that states nothing_important()
+  3) run the function locally and the flag is retrieved
