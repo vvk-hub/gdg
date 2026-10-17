@@ -1,0 +1,33 @@
+Flag
+gdg(5utd@_ld3_13_4_5tndwich)
+
+the vulnerabilities used:
+By exploiting a JWT Algorithm, unauthorized access to administrative endpoints was achieved.led to credential exposure via log files, providing initial SSH access,
+which was ultimately escalated to root privilege via improper password reuse.
+
+recreation
+Step 1: JWT Authentication Bypass
+Target Endpoints: /api/admin/logs and /api/admin/orders (initially returned 403 Forbidden).
+
+Vulnerability: The application improperly validated the JSON Web Token (JWT) signature.
+Exploitation:
+
+Captured a valid session token with the payload {"userId": 6, "admin": false}.
+Modified the header to {"alg": "none", "typ": "JWT"}.
+Changed the payload to {"admin": true}.
+Removed the signature component .
+Sent the modified token, bypassing authentication and gaining full access to the admin endpoints.
+
+Step 2: Information Disclosure via Log Files
+Accessed /api/admin/logs using the bypassed JWT token.
+Downloaded the available log files, which contained plaintext credentials for the FTP (File Transfer Protocol) server.
+
+Step 3: Lateral Movement (FTP to SSH)
+Connected to the remote server via FTP using the credentials.
+and downloaded a backup .zip archive containing SSH credentials.
+Authenticated to the target machine via SSH as the intern user.
+
+
+Step 4: Privilege Escalation
+Vulnerability: Weak credential management / Password reuse.
+Exploitation: Executed su - to switch to the root user and supplied the intern account password. The system accepted the reused password, granting a root shell.
